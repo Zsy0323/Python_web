@@ -5,6 +5,15 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'app/market/market.css' %}">
 {% endblock %}
+{% block extJS %}
+    <script src="{% static 'app/market/market.js' %}"></script>
+{% endblock %}
+{% block title %}
+    闪购
+{% endblock %}
+{% block header %}
+    <header><div>闪购</div></header>
+{% endblock %}
 
 {% block content %}
     <div id="market">
@@ -16,7 +25,7 @@
                         {% if typeid == foodtype.typeid %}
                             <div class="yellowSlide"></div>
                         {% endif %}
-                        <a href="{% url 'App:marketwithparams' foodtype.typeid %}">{{ foodtype.typename }}</a>
+                        <a href="{% url 'App:marketwithparams' foodtype.typeid '0' '0' %}">{{ foodtype.typename }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -25,13 +34,13 @@
         <section>
             <nav>
                 <ul>
-                    <li>
+                    <li id="child_type">
                         <span>
-                            全部类型 <span class="glyphicon glyphicon-chevron-down"></span>
+                            全部类型 <span id="child_type_icon" class="glyphicon glyphicon-chevron-down"></span>
                         </span>
                     </li>
-                    <li>
-                        <span>综合排序<span class="glyphicon glyphicon-chevron-down"></span></span>
+                    <li id="sort_rule">
+                        <span>综合排序<span id="sort_rule_type" class="glyphicon glyphicon-chevron-down"></span></span>
                     </li>
                 </ul>
             </nav>
@@ -53,16 +62,48 @@
                                         <s>￥{{ goods.marketprice }}</s>
                                     </p>
                                 </div>
+
                             </a>
                             <section>
-                                <button>-</button>
-                                <span>1</span>
-                                <button>+</button>
+                                <button class="reduce">-</button>
+                                <span class="number">1</span>
+                                <button class="add">+</button>
                             </section>
+                            <button goodsid="{{ goods.id }}" class="addtocart">加入购物车</button>
                         </li>
                     {% endfor %}
 
                 </ul>
+                {# 子分类 #}
+                <div id="child_type_container">
+                    <div>
+                        {% for child_type in child_type_list %}
+                            <a href="{% url 'App:marketwithparams' typeid child_type.1 '0' %}">
+                                <span>{{ child_type.0 }}</span>
+                            </a>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                {# 排序 #}
+                <div id="sort_rule_container">
+                    <div>
+                        <a href="{% url 'App:marketwithparams' typeid typechildid '0' %}">
+                            <span>综合排序</span>
+                        </a>
+                        <a href="{% url 'App:marketwithparams' typeid typechildid '1' %}">
+
+                            <span>销量排序</span>
+                        </a>
+                        <a href="{% url 'App:marketwithparams' typeid typechildid '2' %}">
+
+                            <span>价格降序</span>
+                        </a>
+                        <a href="{% url 'App:marketwithparams' typeid typechildid '3' %}">
+                            <span>价格升序</span>
+                        </a>
+                    </div>
+                </div>
             </menu>
         </section>
     </div>

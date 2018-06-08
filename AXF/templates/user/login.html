@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extCSS %}
+    <link rel="stylesheet" href="{% static 'app/user/login.css' %}">
+{% endblock %}
+{% block extJS %}
+    <script src="{% static 'js/md5.js' %}"></script>
+    <script src="{% static 'app/user/login.js' %}"></script>
+{% endblock %}
+
+{% block header %}
+    <header>
+        <div><a href="{% url 'App:mine' %}">返回</a>登录</div>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form action="{% url 'App:l_handle' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" class="form-control" name="username" id="username" placeholder="请输入用户名">
+
+            </div>
+            {% if status == 0 %}
+                <p style="color: red">{{ msg }}</p>
+
+            {% endif %}
+
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="请输入密码">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success" id="btn">登录</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

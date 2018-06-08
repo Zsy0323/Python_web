@@ -98,7 +98,40 @@ class Goods(models.Model):
         db_table = 'axf_goods'
 
 
+# 用户
+class User(models.Model):
+    name = models.CharField(max_length=30)
+    password = models.CharField(max_length=50)
+    email = models.EmailField(null=True,blank=True)
+    icon = models.CharField(max_length=100,null=True,blank=True)
+    sex = models.BooleanField(default=True)
+    is_delete = models.BooleanField(default=False)
 
+
+# 购物类
+class Cart(models.Model):
+    user = models.ForeignKey(User)
+    goods = models.ForeignKey(Goods)
+    num = models.IntegerField(default=1)
+    is_select = models.BooleanField(default=True)
+
+
+# 订单
+class Order(models.Model):
+    order_id = models.CharField(max_length=50,unique=True)
+    order_createtime = models.DateField(auto_now_add=True)
+    order_price = models.FloatField(default=0)
+    # 订单状态：0表示待付款
+    order_status = models.CharField(max_length=10,default=0)
+    user = models.ForeignKey(User)
+
+
+# 订单中的商品
+class OrderGoods(models.Model):
+    goods = models.ForeignKey(Goods)
+    order = models.ForeignKey(Order)
+    num = models.IntegerField(default=1)
+    price = models.FloatField()
 
 
 
